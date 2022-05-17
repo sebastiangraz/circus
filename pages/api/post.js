@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    await client.queryJSON(
+    await client.query(
       "insert BlogPost { title := <str>$title, content := <str>$content };",
       {
         title: req.body.data.title,

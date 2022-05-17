@@ -5,42 +5,6 @@ import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 
-const styles = {
-  container: {
-    maxWidth: "1288px",
-    margin: "5rem auto",
-    width: "90%",
-    display: "grid",
-  },
-  flex: {
-    display: "flex",
-    alignItems: "start",
-    gap: "1rem",
-  },
-  input: {
-    all: "unset",
-    background: "#fff",
-    padding: "1rem",
-  },
-  button: {
-    display: "inline-flex",
-    boxShadow: "0 0 0 1px currentColor inset",
-    padding: "0.5rem 1rem",
-    alignItems: "center",
-    cursor: "pointer",
-  },
-  grid: {
-    marginTop: "1rem",
-    gap: "1rem",
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-  },
-  card: {
-    padding: "1rem",
-    background: "#fff",
-  },
-};
-
 const Home = () => {
   const [entryData, setEntryData] = useState({});
 
@@ -141,6 +105,42 @@ const Home = () => {
       </main>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    maxWidth: "1288px",
+    margin: "5rem auto",
+    width: "90%",
+    display: "grid",
+  },
+  flex: {
+    display: "flex",
+    alignItems: "start",
+    gap: "1rem",
+  },
+  input: {
+    all: "unset",
+    background: "#fff",
+    padding: "1rem",
+  },
+  button: {
+    display: "inline-flex",
+    boxShadow: "0 0 0 1px currentColor inset",
+    padding: "0.5rem 1rem",
+    alignItems: "center",
+    cursor: "pointer",
+  },
+  grid: {
+    marginTop: "1rem",
+    gap: "1rem",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+  },
+  card: {
+    padding: "1rem",
+    background: "#fff",
+  },
 };
 
 export default Home;
