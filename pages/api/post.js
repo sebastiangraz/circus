@@ -10,10 +10,23 @@ import { NextApiRequest, NextApiResponse } from "next";
 export const client = createClient();
 
 export default async function handler(req, res) {
-  const posts = await client.query(`select BlogPost {
+  if (req.method === "GET") {
+    const posts = await client.query(`select BlogPost {
     id,
     title,
     content
   };`);
-  res.status(200).json(posts);
+    return res.status(200).json(posts);
+  }
+
+  if (req.method === "POST") {
+    await client.queryJSON(
+      "insert BlogPost { title := <str>$title, content := <str>$content };",
+      {
+        title: req.body.data.title,
+        content: req.body.data.content,
+      }
+    );
+    return res.status(200).send("Success");
+  }
 }
