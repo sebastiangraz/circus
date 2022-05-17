@@ -6,7 +6,7 @@ import { QueryClientProvider, useMutation, useQuery } from "react-query";
 import axios from "axios";
 
 const Home = () => {
-  // const [posts, setPosts] = useState(null);
+  const [entryData, setEntryData] = useState({});
 
   // useEffect(() => {
   //   fetch(`/api/post`)
@@ -18,40 +18,60 @@ const Home = () => {
     axios.get("/api/post").then((res) => res.data)
   );
 
-  const refetchTasks = posts.refetch;
+  const refetchTasks = posts.refetch();
 
   const add = useMutation(
     (data) => {
       axios.post("/api/post", { data });
     },
-    { onSuccess: refetchTasks() }
+    { onSuccess: refetchTasks }
   );
+
+  const handleDelete = useMutation(
+    (id) => {
+      console.log(id);
+      axios.delete(`/api/post/${id}`);
+    },
+    {
+      onSuccess: refetchTasks,
+    }
+  );
+
+  const handleEntry = (e) => {
+    let obj = {};
+
+    obj = { title: e.target.value, content: "Content!" };
+
+    setEntryData((entryData) => ({
+      ...entryData,
+      ...obj,
+    }));
+  };
+
+  const handleKeyDown = (e) => {
+    let obj = {};
+
+    obj = { title: e.target.value, content: "Content!" };
+    if (e.key === "Enter") {
+      add.mutate(entryData);
+    }
+  };
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>My Circus</title>
+        <title>Circus</title>
         <meta name="description" content="An awesome blog" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>Circus</h1>
-        <input
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              add.mutate({
-                title: e.target.value,
-                content: "",
-              });
-            }
-          }}
-        ></input>
+        <input onChange={handleEntry} onKeyDown={handleKeyDown}></input>
+        {entryData.title}
         <a
-          onClick={(e) => {
-            let title = "New title!!";
-            let content = "New content!!";
-            add.mutate({ title, content });
+          onClick={() => {
+            add.mutate(entryData);
           }}
         >
           Add
@@ -60,11 +80,12 @@ const Home = () => {
         {posts.data ? (
           posts.data.map((post) => {
             return (
-              <a href={`/post/${post.id}`} key={post.id}>
-                <div className={styles.card}>
-                  <p>{post.title}</p>
-                </div>
-              </a>
+              <div key={post.id} className={styles.card}>
+                <a href={`/post/${post.id}`}>
+                  <p>{post.title}</p>{" "}
+                </a>
+                {/* <span onClick={handleDelete.mutate}>Delete</span> */}
+              </div>
             );
           })
         ) : (
