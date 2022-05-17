@@ -27,6 +27,7 @@ const styles = {
     boxShadow: "0 0 0 1px currentColor inset",
     padding: "0.5rem 1rem",
     alignItems: "center",
+    cursor: "pointer",
   },
   grid: {
     marginTop: "1rem",
