@@ -8,37 +8,21 @@ import axios from "axios";
 const Home = () => {
   const [entryData, setEntryData] = useState({});
 
-  // useEffect(() => {
-  //   fetch(`/api/post`)
-  //     .then((result) => result.json())
-  //     .then(setEntryData);
-  // }, []);
-
-  //   axios.get("/api/post").then((res) => {
-  //     return res.data;
-  //   });
+  const onError = (err) => {
+    alert("onError", err?.response?.data);
+  };
 
   const posts = useQuery("todos", () =>
     axios.get("/api/post").then((res) => res.data)
   );
 
-  // const refetchTasks = posts.refetch();
+  const refetchTasks = posts.refetch;
 
   const add = useMutation(
     (data) => {
       axios.post("/api/post", { data });
-    }
-    // { onSuccess: refetchTasks }
-  );
-
-  const handleDelete = useMutation(
-    (id) => {
-      console.log(id);
-      axios.delete(`/api/post/${id}`);
-    }
-    // {
-    //   onSuccess: refetchTasks,
-    // }
+    },
+    { onSuccess: refetchTasks, onError }
   );
 
   const handleEntry = (e) => {
@@ -94,7 +78,7 @@ const Home = () => {
                   <a href={`/post/${post.id}`}>
                     <p>{post.title}</p>{" "}
                   </a>
-                  {/* <span onClick={handleDelete.mutate}>Delete</span> */}
+                  <span onClick={deletePost.mutate}>Delete</span>
                 </div>
               );
             })
@@ -138,8 +122,9 @@ const styles = {
     gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
   },
   card: {
-    padding: "1rem",
+    padding: "0.25rem 1rem",
     background: "#fff",
+    overflow: "hidden",
   },
 };
 

@@ -1,44 +1,26 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
-// export default function handler(req, res) {
-//   res.status(200).json({ name: 'John Doe' })
-// }
-
 import { createClient } from "edgedb";
-import { NextApiRequest, NextApiResponse } from "next";
-
+import e from "../../dbschema/edgeql-js";
 export const client = createClient();
 
+const getPosts = e.select(e.BlogPost, () => ({
+  id: true,
+  title: true,
+  content: true,
+}));
+
 export default async function handler(req, res) {
-  const id = req.query.id;
+  const posts = await getPosts.run(client);
 
   if (req.method === "GET") {
-    const posts = await client.query(`select BlogPost {
-    id,
-    title,
-    content
-  };`);
     return res.status(200).json(posts);
   }
-
   if (req.method === "POST") {
-    await client.query(
-      "insert BlogPost { title := <str>$title, content := <str>$content };",
-      {
-        title: req.body.data.title,
-        content: req.body.data.content,
-      }
-    );
-    return res.status(200).send("Success");
+    const insert = e.insert(e.BlogPost, {
+      title: req.body.data.title,
+      content: req.body.data.content,
+    });
+    return res.status(200).json(await insert.run(client));
   }
-
-  // if (req.method === "DELETE") {
-  //   console.log(req.body.data.title, "LELKEK DELETE");
-  //   await client.queryJSON(`delete BlogPost FILTER .id = <uuid>$id;`, {
-  //     id,
-  //   });
-  //   return res.status(200).send("Success");
-  // }
 
   return res.status(400);
 }
