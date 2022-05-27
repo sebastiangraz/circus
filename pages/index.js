@@ -78,7 +78,6 @@ const Home = () => {
           </a>
         </div>
         <div style={styles.grid}>
-          {JSON.stringify(entryData.title, null, 2)}
           {posts.data ? (
             posts.data.map((post) => {
               return (
