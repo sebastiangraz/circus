@@ -12,18 +12,25 @@ const Home = () => {
     alert("onError", err?.response?.data);
   };
 
-  const posts = useQuery("todos", () =>
+  const posts = useQuery("LOOK AT ME", () =>
     axios.get("/api/post").then((res) => res.data)
   );
 
   const refetchTasks = posts.refetch;
 
-  const add = useMutation(
-    (data) => {
-      axios.post("/api/post", { data });
-    },
-    { onSuccess: refetchTasks, onError }
-  );
+  const add = useMutation((data) => {
+    axios.post("/api/post", { data }),
+      {
+        onSuccess: refetchTasks,
+      };
+  });
+
+  const deleteTask = useMutation((data) => {
+    axios.delete(`/api/post`, { data }),
+      {
+        onSuccess: refetchTasks,
+      };
+  });
 
   const handleEntry = (e) => {
     let obj = {};
@@ -71,6 +78,7 @@ const Home = () => {
           </a>
         </div>
         <div style={styles.grid}>
+          {JSON.stringify(entryData.title, null, 2)}
           {posts.data ? (
             posts.data.map((post) => {
               return (
@@ -78,7 +86,14 @@ const Home = () => {
                   <a href={`/post/${post.id}`}>
                     <p>{post.title}</p>{" "}
                   </a>
-                  <span onClick={deletePost.mutate}>Delete</span>
+                  <span
+                    style={{ ...styles.button, fontSize: "75%" }}
+                    onClick={() => {
+                      deleteTask.mutate(post.id);
+                    }}
+                  >
+                    Delete
+                  </span>
                 </div>
               );
             })
