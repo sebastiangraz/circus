@@ -26,12 +26,27 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "DELETE") {
+    const deleteItem = e.delete(e.BlogPost, (post) => ({
+      filter: e.op(post.id, "=", e.uuid(id)),
+    }));
+    return res.status(200).json(await deleteItem.run(client));
+  }
+
+  if (req.method === "DELETE") {
     return await e
       .delete(e.BlogPost, (post) => ({
         filter: e.op(post.id, "=", e.uuid(id)),
       }))
       .run(client);
   }
+
+  // if (req.method === "DELETE") {
+  //   return await e
+  //     .delete(e.BlogPost, (post) => ({
+  //       filter: e.op(post.id, "=", e.uuid(id)),
+  //     }))
+  //     .run(client);
+  // }
 
   return res.status(400);
 }

@@ -82,7 +82,7 @@ const Home = () => {
             posts.data.map((post) => {
               return (
                 <div key={post.id} style={styles.card}>
-                  <a href={`/post/${post.id}`}>
+                  <a href={`/post/${post.title}`}>
                     <p>{post.title}</p>{" "}
                   </a>
                   <span
